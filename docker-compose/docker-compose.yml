@@ -1,0 +1,26 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=data
+
+  web:
+    build: ..
+    ports:
+      - "8000:80"
+    links:
+      - mariadb
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 8080:80
+    links:
+      - mariadb
+    environment:
+      - PMA_HOST=mariadb
